@@ -1,3 +1,4 @@
+from __future__ import annotations
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
@@ -7,7 +8,7 @@ import ckan.plugins.toolkit as toolkit
 from ckanext.api.logic import (
     action, auth, validators
 )
-
+from ckan.config.declaration import Declaration, Key
 
 class ApiPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
@@ -18,6 +19,7 @@ class ApiPlugin(plugins.SingletonPlugin):
     # plugins.implements(plugins.IClick)
     # plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IValidators)
+    plugins.implements(plugins.IConfigDeclaration)
     
 
     # IConfigurer
@@ -26,8 +28,25 @@ class ApiPlugin(plugins.SingletonPlugin):
         toolkit.add_template_directory(config_, "templates")
         toolkit.add_public_directory(config_, "public")
         toolkit.add_resource("assets", "api")
+        
+    def declare_config_options(self, declaration: Declaration, key: Key= None):
+        self._load_declaration(declaration)
+        
+    def _load_declaration(self, declaration: Declaration):
+        import os
+        import yaml
+        filename = os.path.join(
+            os.path.dirname(__file__),
+            "config_declaration.yaml"
+        )
+        with open(filename) as src:
+            data = yaml.safe_load(src)
 
-    
+        try:
+            declaration.load_dict(data)
+        except ValueError:
+            # we a loading two recline plugins that are share config declaration.
+            pass
     # IAuthFunctions
 
     def get_auth_functions(self):

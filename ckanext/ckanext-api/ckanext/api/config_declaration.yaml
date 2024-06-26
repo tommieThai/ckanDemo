@@ -1,0 +1,9 @@
+version: 1
+groups:
+- annotation: API Token Settings
+  options:
+  - default: 
+    key: api_token.name_genergate
+    example: "_API_TOKEN_DEFAULT"
+    description: Name api token
+
