@@ -1,0 +1,14 @@
+# new_template-js:
+#   filter: rjsmin
+#   output: ckanext-new_template/%(version)s-new_template.js
+#   contents:
+#     - js/new_template.js
+#   extra:
+#     preload:
+#       - base/main
+
+# new_template-css:
+#   filter: cssrewrite
+#   output: ckanext-new_template/%(version)s-new_template.css
+#   contents:
+#     - css/new_template.css
