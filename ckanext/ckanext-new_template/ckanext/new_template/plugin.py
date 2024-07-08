@@ -1,3 +1,4 @@
+from ckan.common import CKANConfig
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 
@@ -9,6 +10,18 @@ import ckan.plugins.toolkit as toolkit
 #     action, auth, validators
 # )
 
+def most_popular_groups():
+    '''Return a sorted list of the groups with the most datasets.'''
+
+    # Get a list of all the site's groups from CKAN, sorted by number of
+    # datasets.
+    groups = toolkit.get_action('group_list')(
+        {}, {'sort': 'package_count desc', 'all_fields': True})
+
+    # Truncate the list to the 3 most popular groups only.
+    groups = groups[:3]
+
+    return groups
 
 class NewTemplatePlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
@@ -17,18 +30,17 @@ class NewTemplatePlugin(plugins.SingletonPlugin):
     # plugins.implements(plugins.IActions)
     # plugins.implements(plugins.IBlueprint)
     # plugins.implements(plugins.IClick)
-    # plugins.implements(plugins.ITemplateHelpers)
+    plugins.implements(plugins.ITemplateHelpers)
     # plugins.implements(plugins.IValidators)
     
 
     # IConfigurer
 
-    def update_config(self, config_):
-        toolkit.add_template_directory(config_, "templates")
-        toolkit.add_public_directory(config_, "public")
+    def update_config(self, config: CKANConfig):
+        toolkit.add_template_directory(config, "templates")
+        toolkit.add_public_directory(config, "public")
         toolkit.add_resource("assets", "new_template")
 
-    
     # IAuthFunctions
 
     # def get_auth_functions(self):
@@ -51,9 +63,16 @@ class NewTemplatePlugin(plugins.SingletonPlugin):
 
     # ITemplateHelpers
 
-    # def get_helpers(self):
-    #     return helpers.get_helpers()
+    def get_helpers(self):
+        '''Register the most_popular_groups() function above as a template
+        helper function.
 
+        '''
+        # Template helper function names should begin with the name of the
+        # extension they belong to, to avoid clashing with functions from
+        # other extensions.
+        return {'example_theme_most_popular_groups': most_popular_groups}
+    
     # IValidators
 
     # def get_validators(self):

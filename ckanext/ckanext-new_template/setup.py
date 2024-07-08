@@ -14,3 +14,8 @@ setup(
         ],
     }
 )
+
+entry_points='''
+    [ckan.plugins]
+    new_template=ckanext.new_template.plugin:NewTemplatePlugin
+''',

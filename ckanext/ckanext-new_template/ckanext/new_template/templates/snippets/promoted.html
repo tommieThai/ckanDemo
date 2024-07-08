@@ -1,0 +1,26 @@
+{% set intro = g.site_intro_text %}
+
+<div class="module-promotion card box">
+  <div>
+    {% if intro %}
+      {{ h.render_markdown(intro) }}
+    {% else %}
+      <h1 class="page-heading">{{ _("Welcome to HypeX") }}</h1>
+      <p>
+        {% trans %}Nice to see you here at HypeX. Take your time to visit our website.
+        Feel free to ask any questions you concerned about!
+        {% endtrans %}
+      </p>
+    {% endif %}
+  </div>
+
+  {% block home_image %}
+    <section class="featured media-overlay hidden-xs">
+      {% block home_image_content %}
+        <a class="media-image" href="#">
+          <img class="img-fluid" src="{{ h.url_for_static('HypeX-logo.png') }}" alt="Placeholder" />
+        </a>
+      {% endblock %}
+    </section>
+  {% endblock %}
+</div>
