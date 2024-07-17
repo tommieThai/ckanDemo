@@ -20,8 +20,8 @@ def most_popular_groups():
 
     # Truncate the list to the 3 most popular groups only.
     groups = groups[:3]
-
-    return groups
+    sorted_groups = sorted(groups, key=lambda x: x['package_count'], reverse = True)
+    return sorted_groups
 
 class NewTemplatePlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)

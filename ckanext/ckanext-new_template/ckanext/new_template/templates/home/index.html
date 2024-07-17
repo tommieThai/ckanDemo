@@ -12,3 +12,8 @@
 {% block search %}
 {% snippet 'snippets/search.html' %}
 {% endblock %}
+
+{% block style %}
+{{ super() }}
+<link href="/assets/css/new_temp.css">
+{% endblock %}
