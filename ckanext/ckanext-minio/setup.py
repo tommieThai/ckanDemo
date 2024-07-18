@@ -14,3 +14,8 @@ setup(
         ],
     }
 )
+
+entry_points='''
+    [ckan.plugins]
+    minio=ckanext.minio.plugin:MinioPlugin
+''',
