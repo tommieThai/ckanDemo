@@ -1,0 +1,14 @@
+# api-js:
+#   filter: rjsmin
+#   output: ckanext-api/%(version)s-api.js
+#   contents:
+#     - js/api.js
+#   extra:
+#     preload:
+#       - base/main
+
+# api-css:
+#   filter: cssrewrite
+#   output: ckanext-api/%(version)s-api.css
+#   contents:
+#     - css/api.css

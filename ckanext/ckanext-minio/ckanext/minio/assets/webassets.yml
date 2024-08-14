@@ -1,0 +1,14 @@
+# minio-js:
+#   filter: rjsmin
+#   output: ckanext-minio/%(version)s-minio.js
+#   contents:
+#     - js/minio.js
+#   extra:
+#     preload:
+#       - base/main
+
+# minio-css:
+#   filter: cssrewrite
+#   output: ckanext-minio/%(version)s-minio.css
+#   contents:
+#     - css/minio.css

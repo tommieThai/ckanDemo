@@ -110,6 +110,3 @@ class TrackingPlugin(p.SingletonPlugin):
         return {
             "popular": popular,
         }
-
-
-

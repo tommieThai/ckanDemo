@@ -1,0 +1,12 @@
+.masthead {
+    background: #010101 url("../../base/images/bg.png");
+      background-color: rgb(0, 0, 0);
+      background-position-x: 0%;
+      background-position-y: 0%;
+      background-repeat: repeat;
+      background-attachment: scroll;
+      background-image: url("../../base/images/bg.png");
+      background-size: auto;
+      background-origin: padding-box;
+      background-clip: border-box;
+  }

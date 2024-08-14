@@ -116,6 +116,8 @@ class Upload(object):
         self.filename = None
         self.filepath = None
         path = get_storage_path()
+        print (object_type)
+        print(path)
         if not path:
             return
         self.storage_path = os.path.join(path, 'storage',
@@ -171,6 +173,7 @@ class Upload(object):
                 data_dict[url_field] = ''
 
     def upload(self, max_size: int = 2) -> None:
+        print ("asd")
         ''' Actually upload the file.
         This should happen just before a commit but after the data has
         been validated and flushed to the db. This is so we do not store
