@@ -1,6 +1,7 @@
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.common import CKANConfig
+from ckan.views.resource import download as ckan_download
 from ckanext.minio.logic.minio_con import MinioConnection
 import ckanext.minio.logic.action.delete as delete
 import ckanext.minio.logic.action.update as update
@@ -45,14 +46,16 @@ class MinioPlugin(plugins.SingletonPlugin):
     # IBlueprint
 
     def get_blueprint(self):
+        # if minio_connection.is_connected():
         return views.get_blueprints()
+       
 
     # IUploader
 
     #Tải dữ liệu lên Minio
     def get_resource_uploader(self, data_dict):
         # init_minio()
-        if minio_connection.is_enabled():
+        if minio_connection.is_connected():
             return create.MinioResource(data_dict, minio_connection.get_client(), minio_connection.get_bucket_name())
         else:
             return ResourceUpload(data_dict)
@@ -65,6 +68,8 @@ class MinioPlugin(plugins.SingletonPlugin):
             'resource_update': update.resource_minio_update,
             'dataset_purge': delete.dataset_minio_purge
         }
+    
+     
 
     #IResourceController
 

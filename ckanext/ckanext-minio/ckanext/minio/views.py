@@ -11,7 +11,7 @@ from ckan.lib.helpers import helper_functions as h
 from ckan.lib import signals
 import ckan.lib.uploader as uploader
 import urllib.request
-import shutil
+from ckanext.minio.logic.minio_con import MinioConnection
 
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
@@ -49,16 +49,27 @@ def download(package_type: str,
 
     if rsc.get(u'url_type') == u'upload':
         upload = uploader.get_resource_uploader(rsc)
-        filepath = upload.get_path_minio(pkg=pkg.get('name'), id=rsc[u'id'])
-        filename = filename or rsc.get('name', 'downloaded_file')
+        if MinioConnection().is_connected():
+
+            filepath = upload.get_path_minio(pkg=pkg.get('name'), id=rsc[u'id'])
+            filename = filename or rsc.get('name', 'downloaded_file')
         
-        with urllib.request.urlopen(filepath) as response:
-            file_data = response.read()
+            with urllib.request.urlopen(filepath) as response:
+                file_data = response.read()
+            
+            response = Response(file_data)
+            response.headers['Content-Disposition'] = f'attachment; file name = "{filename}"'
+            response.headers['Content-Type'] = rsc.get('mimetype', 'application/octet-stream')
+            return response
+        else: 
+            filepath = upload.get_path(rsc[u'id'])
+            resp = flask.send_file(filepath, download_name=filename)
+            if rsc.get('mimetype'):
+                resp.headers['Content-Type'] = rsc['mimetype']
+            signals.resource_download.send(resource_id)
+            return resp
         
-        response = Response(file_data)
-        response.headers['Content-Disposition'] = f'attachment; file name = "{filename}"'
-        response.headers['Content-Type'] = rsc.get('mimetype', 'application/octet-stream')
-        return response
+        
 
     elif u'url' not in rsc:
         return base.abort(404, _(u'No download is available'))
